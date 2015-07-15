@@ -14,10 +14,6 @@ const Style = StyleSheet.create({
   }
 });
 
-function equalCoords(a, b) {
-  return (a.x === b.x) && (a.y === b.y);
-}
-
 var ButtonGrid = React.createClass({
   mixins: [
     EventListener, FluxMixin, StoreWatchMixin('GridStore')
@@ -35,22 +31,55 @@ var ButtonGrid = React.createClass({
 
     switch (e.which) {
     case Keycodes.Left :
-      this.getFlux().actions.moveLeft();
+      this.moveLeft();
       break;
     case Keycodes.Right :
-      this.getFlux().actions.moveRight();
+      this.moveRight();
       break;
     case Keycodes.Up :
-      this.getFlux().actions.moveUp();
+      this.moveUp();
       break;
     case Keycodes.Down :
-      this.getFlux().actions.moveDown();
+      this.moveDown();
       break;
     }
   },
 
+  moveLeft(){
+    if(this.state.focus.x === 0) {
+      return;
+    }
+    this.getFlux().actions.moveLeft();
+  },
+  moveRight(){
+    if(this.state.focus.x === (this.getRowWidth(this.state.focus.y) - 1)) {
+      return;
+    }
+    this.getFlux().actions.moveRight();
+  },
+  moveUp(){
+    if(this.state.focus.y === 0) {
+      return;
+    }
+    this.getFlux().actions.moveUp();
+  },
+  moveDown(){
+    if(this.state.focus.y === (this.getHeight() - 1)) {
+      return;
+    }
+    this.getFlux().actions.moveDown();
+  },
+
   getInitialState() {
     return {};
+  },
+
+  getRowWidth(rowNumber) {
+    return this.props.buttonGridData[rowNumber].length;
+  },
+
+  getHeight() {
+    return this.props.buttonGridData.length;
   },
 
   getStateFromFlux() {
@@ -58,26 +87,22 @@ var ButtonGrid = React.createClass({
   },
 
   render() {
-    let coord = {
-      x: 0,
-      y: 0
-    };
+    let x = 0;
+    let y = 0;
 
-    let buttonRows = this.props.buttonGridData.map((buttonRowData) => {
-      let buttonRow = buttonRowData.map((buttonData) => {
-        let focus = equalCoords(coord, this.state.focussed);
 
-        let key = coord.x + ':' + coord.y;
-        coord.x++;
+    let grid = this.props.buttonGridData.map(buttonRowData => {
+      let buttonRow = buttonRowData.map(buttonData => {
 
+        let key = `${x}:${y}`;
         return (
-          <Button focus={focus} key={key}>{buttonData.label}</Button>
-        )
+          <Button coordx={x++} coordy={y} key={key}>{buttonData.label}</Button>
+        );
       });
 
-      let key = 'row' + coord.y;
-      coord.y++;
-      coord.x = 0;
+      let key = `row${y}`;
+      y++;
+      x = 0;
 
       return (
         <div key={key} styles={[Style.row]}>{buttonRow}</div>
@@ -86,7 +111,7 @@ var ButtonGrid = React.createClass({
 
     return (
       <div>
-        {buttonRows}
+        {grid}
       </div>
     );
   }

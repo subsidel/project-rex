@@ -60,9 +60,9 @@ let GridStore = Fluxxor.createStore({
     },
 
     getState() {
-      let focussed = this.focus;
+      let focus = this.focus;
       return {
-        focussed
+        focus
       }
     }
 });
