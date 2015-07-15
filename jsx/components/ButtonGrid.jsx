@@ -45,29 +45,40 @@ var ButtonGrid = React.createClass({
     }
   },
 
-  moveLeft(){
-    if(this.state.focus.x === 0) {
-      return;
+  moveXCorrection(){
+    if(this.state.focus.x > (this.getRowWidth(this.state.focus.y) - 1)) {
+      this.moveLeft();
+      this.moveXCorrection();
     }
+    if(this.state.focus.x < 0) {
+      this.moveRight();
+      this.moveXCorrection();
+    }
+
+  },
+
+  moveLeft(){
     this.getFlux().actions.moveLeft();
+    this.moveXCorrection();
   },
   moveRight(){
-    if(this.state.focus.x === (this.getRowWidth(this.state.focus.y) - 1)) {
-      return;
-    }
     this.getFlux().actions.moveRight();
+    this.moveXCorrection();
   },
   moveUp(){
     if(this.state.focus.y === 0) {
       return;
     }
     this.getFlux().actions.moveUp();
+    this.moveXCorrection();
   },
   moveDown(){
     if(this.state.focus.y === (this.getHeight() - 1)) {
       return;
     }
     this.getFlux().actions.moveDown();
+    this.moveXCorrection();
+
   },
 
   getInitialState() {
