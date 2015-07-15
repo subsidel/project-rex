@@ -1,7 +1,7 @@
 {
   "name": "project-rex",
   "version": "0.0.1",
-  "description": "A TV application launcher, for TV apps with too many URL parameters",
+  "description": "Playing around with stuff",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,12 +11,6 @@
     "url": "http://github.com/subsidel/project-rex.git"
   },
   "keywords": [
-    "TV",
-    "application",
-    "launcher",
-    "TAUL2",
-    "react",
-    "node"
   ],
   "author": "Joel Howard",
   "license": "GPL2",
